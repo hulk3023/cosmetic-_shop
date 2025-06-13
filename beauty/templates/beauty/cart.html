@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block main %}
+    <main>
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="row mb-5">
+                {% if products %}
+                    <form class="col-md-12" method="post" id="cart-form">
+                        {% csrf_token %}
+                        <div class="site-blocks-table">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th class="product-thumbnail">Rasm</th>
+                                    <th class="product-name">Mahsulot nomi</th>
+                                    <th class="product-price">Narxi</th>
+                                    <th class="product-quantity">Soni</th>
+                                    <th class="product-total">Jami</th>
+                                    <th class="product-remove">O'chirish</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in products %}
+                                    <tr data-item-id="{{ product.id }}">
+                                        <td class="product-thumbnail">
+                                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-width: 80px;">
+                                        </td>
+                                        <td class="product-name">
+                                            <h2 class="h5 text-black">{{ product.name }}</h2>
+                                        </td>
+                                        <td>{{ product.price }} so'm</td>
+                                        <td>
+                                            <div class="input-group mb-3" style="max-width: 120px;">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-outline-primary js-btn-minus" type="button" data-item-id="{{ product.id }}">
+                                                        &minus;
+                                                    </button>
+                                                </div>
+                                                <input type="text" class="form-control text-center quantity-input"
+                                                       value="{{ product.quantity }}" readonly
+                                                       data-item-id="{{ product.id }}">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary js-btn-plus" type="button" data-item-id="{{ product.id }}">
+                                                        &plus;
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="total-price">{{ product.total_price }} so'm</td>
+                                        <td>
+                                            <a href="{% url 'remove_from_cart' product.id %}"
+                                               class="btn btn-danger height-auto btn-sm"
+                                               onclick="return confirm('Rostdan ham o\'chirishni xohlaysizmi?')">
+                                                X
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                {% else %}
+                    <div class="col-md-12 text-center">
+                        <h3>Savatcha bo'sh</h3>
+                        <p>Hozircha savatchangizda mahsulotlar yo'q.</p>
+                        <a href="{% url 'product_list' %}" class="btn btn-primary">Xarid qilishni boshlash</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if products %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row mb-5">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <button class="btn btn-primary btn-sm btn-block" onclick="location.reload()">
+                                Savatchani yangilash
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'product_list' %}" class="btn btn-secondary btn-sm btn-block">
+                                Ortga qaytish
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="text-black h4" for="coupon">Kupon</label>
+                            <p>Kupon kodi bo'lsa kiriting.</p>
+                        </div>
+                        <div class="col-md-8 mb-3 mb-md-0">
+                            <input type="text" class="form-control py-3" id="coupon" placeholder="Kupon kodi">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary btn-sm px-4" onclick="applyCoupon()">
+                                Kupon qo'llash
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-5">
+                    <div class="row justify-content-end">
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-12 text-right border-bottom mb-5">
+                                    <h3 class="text-black h4 text-uppercase">Savatcha jamlari</h3>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <span class="text-black">Subtotal</span>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <strong class="text-black" id="subtotal">{{ subtotal }} so'm</strong>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <span class="text-black">Total</span>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <strong class="text-black" id="total">{{ total_price }} so'm</strong>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary btn-lg btn-block"
+                                            onclick="window.location='{% url 'checkout' %}'">
+                                        Buyurtma berish
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // CSRF token olish
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Miqdorni oshirish
+        document.querySelectorAll('.js-btn-plus').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemId = this.getAttribute('data-item-id');
+                updateCart(itemId, 'increase');
+            });
+        });
+
+        // Miqdorni kamaytirish
+        document.querySelectorAll('.js-btn-minus').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemId = this.getAttribute('data-item-id');
+                updateCart(itemId, 'decrease');
+            });
+        });
+
+        // Savatni yangilash
+        function updateCart(itemId, action) {
+            fetch('{% url "update_cart" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: `item_id=${itemId}&action=${action}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Sahifani yangilash
+                } else {
+                    alert('Xatolik yuz berdi!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Xatolik yuz berdi!');
+            });
+        }
+    });
+
+    // Kupon qo'llash
+    function applyCoupon() {
+        const couponCode = document.getElementById('coupon').value;
+        if (couponCode.trim() === '') {
+            alert('Kupon kodini kiriting!');
+            return;
+        }
+        // Bu yerda kupon tekshirish logikasini qo'shishingiz mumkin
+        alert('Kupon funksiyasi hali ishlanmoqda!');
+    }
+    </script>
+{% endblock main %}

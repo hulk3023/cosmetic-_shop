@@ -1,0 +1,25 @@
+{% load static %}
+
+<div class="site-blocks-cover d-flex align-items-center" data-aos="fade-up" style=" background-color: #fefefe;">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Matn bo‘limi -->
+            <div class="col-lg-6 mb-5 mb-lg-0 order-2 order-lg-1 text-center text-lg-left">
+                <div class="site-block-cover-content">
+                    <h2 class="sub-title text-muted mb-3" style="letter-spacing: 2px;">NILU BEAUTY COSMETICS 2025</h2>
+                <h1 class="display-4 font-weight-bold text-dark">Create Your Beauty</h1>
+                    <p class="mt-4">
+                        <a href="{% url 'cart_view' %}" class="btn btn-outline-dark btn-lg px-4 py-2 rounded-pill shadow-sm">
+                            🛍 Shop Now
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Rasm bo‘limi -->
+            <div class="col-lg-6 order-1 order-lg-2 text-center">
+                <img src="{% static 'beauty/images/model_3.png' %}" alt="Model Image" class="img-fluid animate__animated animate__fadeInRight" style="max-height: 500px;">
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Buyurtma muvaffaqiyatli!{% endblock %}
+
+{% block main %}
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 text-center">
+                <img src="{% static 'beauty/images/img.png' %}" alt="Success Icon" width="100" class="mb-4">
+                <h2 class="text-success">Rahmat!</h2>
+                <h4 class="mb-4">Sizning buyurtmangiz qabul qilindi</h4>
+                <p>Tez orada bizning operatorlarimiz siz bilan bog'lanib, batafsil ma'lumot berishadi.</p>
+                <a href="https://t.me/sanjarivc" target="blank" class="btn btn-success mt-3">Telegramda bog'laning</a>
+                <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg mt-3">Bosh sahifaga qaytish</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

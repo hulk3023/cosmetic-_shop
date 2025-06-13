@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}To'lov | Cosmetics Shop{% endblock %}
+
+{% block main %}
+<div class="container my-5">
+    <h2>To'lov sahifasi</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mahsulot</th>
+                <th>Soni</th>
+                <th>Narxi</th>
+                <th>Jami</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.product.price }} so'm</td>
+                <td>{{ item.quantity|mul:item.product.price }} so'm</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3"><strong>Jami narx:</strong></td>
+                <td><strong>{{ total_price }} so'm</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form action="{% url 'confirm_order' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name">Ism va familiya</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="phone">Telefon raqam</label>
+            <input type="tel" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="mb-3">
+            <label for="address">Manzil</label>
+            <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Buyurtmani tasdiqlang</button>
+    </form>
+</div>
+{% endblock %}

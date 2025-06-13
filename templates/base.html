@@ -1,0 +1,49 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<html lang="en">
+<head>
+    <title>
+        {% block title %}Nilu Beauty
+        {% endblock %}
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+</head>
+{% include 'components/_style.html' %}
+<body>
+<header>
+    <div class="site-navbar bg-white py-2">
+
+        {% include 'components/_search-wrap.html' %}
+
+        {% include 'components/_container.html' %}
+
+
+    </div>
+</header>
+
+
+<div class="site-wrap">
+
+
+    {% include 'components/_blocks-cover.html' %}
+
+
+    {% include 'components/_kosmetik_toplam.html' %}
+</div>
+<main>
+    {% block main %}
+
+    {% endblock main %}
+
+    {% include 'components/_blocks2-cover.html' %}
+</main>
+<footer>
+    {% include 'components/_footer.html' %}
+
+</footer>
+{% include 'components/_script.html' %}
+</body>
+</html>

@@ -1,0 +1,116 @@
+/* Umumiy sozlamalar */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    padding-top: 50px;
+    min-height: 100vh;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+/* Login va Registration form bloklari */
+.login,
+.registration {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Form guruhlari */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    border-color: #ff69b4;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+}
+
+/* Tugmalar */
+.btn-btn-danger {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Xatolar uchun (agar kerak bo'lsa) */
+.errorlist {
+    color: red;
+    font-size: 0.9rem;
+    list-style-type: none;
+    padding-left: 0;
+}
+.errorlist li::before {
+    content: "⚠ ";
+}
+
+
+/* Kichik qurilmalar (telefonlar, ekran kengligi 576px gacha) */
+@media (max-width: 576px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .login,
+    .registration {
+        max-width: 100%;
+        margin-bottom: 30px;
+    }
+}
+
+/* O'rtacha qurilmalar (planshetlar, 768px gacha) */
+@media (min-width: 577px) and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .login,
+    .registration {
+        width: 90%;
+        max-width: 500px;
+    }
+}
+
+/* Katta ekranlar (desktop) */
+@media (min-width: 992px) {
+    .container {
+        flex-direction: row;
+    }
+}
+
+
+.site-wrap{
+    padding-top: 60px;
+}
+

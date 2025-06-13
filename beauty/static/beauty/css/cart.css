@@ -1,0 +1,32 @@
+/* Savatcha sahifasi uchun stil */
+.cart-image {
+    max-width: 60px;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.messages {
+    margin-bottom: 20px;
+}
+
+.alert-info {
+    text-align: center;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    font-size: 0.9rem;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.btn {
+    font-weight: 500;
+}

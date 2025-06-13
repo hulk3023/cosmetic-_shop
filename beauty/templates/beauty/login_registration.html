@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+<head>
+{% block title %}
+    {{ title }} | Nilu Beauty
+{% endblock %}
+    <link rel="stylesheet" href="{% static 'beauty/css/additional_style.css' %}">
+</head>
+{% block main %}
+    <main>
+        <div class="container pt-5">
+
+            <!-- Xabarlar bo'limi -->
+            {% if messages %}
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-8">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row justify-content-around">
+                <!-- Login formi -->
+                <div class="col-md-5">
+                    <div class="login">
+                        <h2 class="form-title text-center mb-4">Tizimga kirish</h2>
+
+                        {% if login_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ login_form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <form action="{% url 'user_login' %}" method="post" class="login-form">
+                            {% csrf_token %}
+                            <div class="form-group mb-3">
+                                {{ login_form.username|add_class:"form-control"|attr:"placeholder:Username" }}
+                                {% if login_form.username.errors %}
+                                    <small class="text-danger">{{ login_form.username.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ login_form.password|add_class:"form-control"|attr:"placeholder:Parol" }}
+                                {% if login_form.password.errors %}
+                                    <small class="text-danger">{{ login_form.password.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <button type="submit" class="btn btn-danger rounded w-100">Kirish</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Ro'yhatdan o'tish formi -->
+                <div class="col-md-5">
+                    <div class="registration">
+                        <h2 class="form-title text-center mb-4">Ro'yhatdan o'tish</h2>
+
+                        {% if register_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ register_form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <form action="{% url 'register' %}" method="post" class="registration-form">
+                            {% csrf_token %}
+                            <div class="form-group mb-3">
+                                {{ register_form.username|add_class:"form-control"|attr:"placeholder:Foydalanuvchi nomi" }}
+                                {% if register_form.username.errors %}
+                                    <small class="text-danger">{{ register_form.username.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ register_form.first_name|add_class:"form-control"|attr:"placeholder:Ismingiz" }}
+                                {% if register_form.first_name.errors %}
+                                    <small class="text-danger">{{ register_form.first_name.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ register_form.last_name|add_class:"form-control"|attr:"placeholder:Familyangiz" }}
+                                {% if register_form.last_name.errors %}
+                                    <small class="text-danger">{{ register_form.last_name.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ register_form.email|add_class:"form-control"|attr:"placeholder:E-mail" }}
+                                {% if register_form.email.errors %}
+                                    <small class="text-danger">{{ register_form.email.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ register_form.password1|add_class:"form-control"|attr:"placeholder:Parol" }}
+                                {% if register_form.password1.errors %}
+                                    <small class="text-danger">{{ register_form.password1.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group mb-3">
+                                {{ register_form.password2|add_class:"form-control"|attr:"placeholder:Parolni takrorlang" }}
+                                {% if register_form.password2.errors %}
+                                    <small class="text-danger">{{ register_form.password2.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <button type="submit" class="btn btn-success rounded w-100">Ro'yhatdan o'tish</button>
+                        </form>
+
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <strong>Parol talablari:</strong><br>
+                                • Kamida 8 ta belgi<br>
+                                • Faqat raqamlardan iborat bo'lmasligi kerak<br>
+                                • Keng tarqalgan parollar ishlatmang
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .form-title {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert {
+            border-radius: 8px;
+        }
+
+        .text-danger {
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .col-md-5 {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+{% endblock %}
