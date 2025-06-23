@@ -1,0 +1,49 @@
+{% load static %}
+<div class="site-section">
+    <div class="container">
+        <div class="row">
+            <div class="title-section text-center mb-5 col-12">
+                <h2 class="text-uppercase">KATEGORIYALAR</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 block-3">
+                <div class="nonloop-block-3 owl-carousel">
+                    {% for product in products %}
+                        <div class="item">
+                            <div class="item-entry">
+                                <a href="#" class="product-item md-height bg-gray d-block">
+                                    {% if product.image %}
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+                                    {% else %}
+                                        <img src="{% static 'beauty/images/placeholder.png' %}" alt="No Image" class="img-fluid">
+                                    {% endif %}
+                                </a>
+                                <h2 class="item-title"><a href="#">{{ product.name }}</a></h2>
+                                {% if product.sale_price %}
+                                    <strong class="item-price">
+                                        <del>{{ product.price }}</del>
+                                        {{ product.sale_price }}
+                                    </strong>
+                                {% else %}
+                                    <strong class="item-price">{{ product.price }}</strong>
+                                {% endif %}
+                                <div class="star-rating">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= product.avg_rating|floatformat:"0" %}
+                                            <span class="icon-star2 text-warning"></span>
+                                        {% else %}
+                                            <span class="icon-star2 text-secondary"></span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-center">Bu kategoriyada hech qanday mahsulot topilmadi.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

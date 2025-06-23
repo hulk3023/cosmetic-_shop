@@ -1,0 +1,33 @@
+/* Mahsulot kartasi */
+.card {
+    transition: transform 0.3s ease;
+    border-radius: 0 !important;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.product-img-container img {
+    height: 200px;
+    object-fit: cover;
+    transition: all 0.3s ease-in-out;
+}
+
+.product-img-container img:hover {
+    transform: scale(1.1);
+}
+
+.card-title a:hover {
+    color: #ff69b4;
+}
+
+.item-price {
+    font-weight: bold;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.3em 0.6em;
+}

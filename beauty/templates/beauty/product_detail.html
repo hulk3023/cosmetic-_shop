@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ product.name }} | Nilu Beauty{% endblock %}
+
+{% block main %}
+    <main>
+        <div class="site-section">
+            <div class="container">
+                <!-- Xabarlar -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row">
+                    <!-- Rasmlar -->
+                    <div class="col-md-6">
+                        {% if product.images.all %}
+                            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    {% for img in product.images.all %}
+                                        <li data-target="#carouselExampleIndicators"
+                                            data-slide-to="{{ forloop.counter0 }}"
+                                            class="{% if forloop.first %}active{% endif %}"></li>
+                                    {% endfor %}
+                                </ol>
+                                <div class="carousel-inner">
+                                    {% for img in product.images.all %}
+                                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                            <img src="{{ img.image.url }}" class="d-block w-100"
+                                                 alt="{{ product.name }}" style="height: 400px; object-fit: cover;">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                                   data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Oldingi</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                                   data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Keyingi</span>
+                                </a>
+                            </div>
+                        {% elif product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid"
+                                 style="height: 400px; object-fit: cover; width: 100%;">
+                        {% else %}
+                            <div class="text-center p-5 bg-light">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                                <p class="mt-2 text-muted">Rasm mavjud emas</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Mahsulot ma'lumoti -->
+                    <div class="col-md-6">
+                        <h2>{{ product.name }}</h2>
+
+                        <!-- Brand -->
+                        {% if product.brand %}
+                            <p class="text-muted mb-2">
+                                <strong>Brand:</strong> {{ product.brand.name }}
+                            </p>
+                        {% endif %}
+
+                        <!-- Category -->
+                        <p class="text-muted mb-3">
+                            <strong>Kategoriya:</strong> {{ product.category.name }}
+                        </p>
+
+                        <p class="lead">{{ product.description }}</p>
+
+                        <!-- Stock holati -->
+                        {% if product.stock > 0 and product.is_available %}
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle"></i> Mavjud ({{ product.stock }} dona)
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i> Hozircha mavjud emas
+                            </div>
+                        {% endif %}
+
+                        <!-- Narx -->
+                        <div class="mb-4">
+                            {% if product.sale_price %}
+                                <div class="d-flex align-items-center">
+                                    <del class="text-danger h5 me-3">{{ product.price }} so'm</del>
+                                    <h3 class="text-success mb-0">{{ product.sale_price }}so'm</h3>
+                                    <span class="badge badge-danger ms-2">
+                                        -{{ product.get_discount_percentage }}%
+                                    </span>
+                                </div>
+                            {% else %}
+                                <h3 class="text-primary">{{ product.price }} so'm</h3>
+                            {% endif %}
+                        </div>
+                        <!-- Reyting -->
+                        {% with reviews=product.reviews.all %}
+                            {% if reviews %}
+                                <div class="star-rating mb-3">
+                                    <strong>O'rtacha reyting:</strong>
+                                    {% include 'beauty/components/_rating_stars.html' %}
+                                    <small class="text-warning"> ({{ reviews.count }} ta izoh)</small>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+
+                        <!-- Savatga qo'shish -->
+                        {% if product.stock > 0 and product.is_available %}
+                            <div class="mb-4">
+                                <!-- Miqdor tanlash -->
+                                <div class="form-group mb-3">
+                                    <label for="quantity"><strong>Miqdor:</strong></label>
+                                    <div class="input-group" style="max-width: 150px;">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-outline-secondary" type="button" id="minus-btn">-</button>
+                                        </div>
+                                        <input type="number" class="form-control text-center" id="quantity"
+                                               value="1" min="1" max="{{ product.stock }}">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" id="plus-btn">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Savatga qo'shish tugmasi -->
+                                <button type="button" class="btn btn-success btn-lg me-2" id="add-to-cart-btn"
+                                        data-product-id="{{ product.id }}">
+                                    <i class="fas fa-shopping-cart"></i> Savatga qo'shish
+                                </button>
+
+                                <!-- Savatni ko'rish -->
+                                <a href="{% url 'cart_view' %}" class="btn btn-outline-success btn-lg">
+                                    <i class="fas fa-shopping-basket"></i> Savatni ko'rish
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-secondary">
+                                <i class="fas fa-ban"></i> Mahsulot hozircha sotuvda yo'q
+                            </div>
+                        {% endif %}
+
+                        <!-- Ortga qaytish -->
+                        <a href="{% url 'product_list' %}" class="btn btn-outline-primary btn-lg rounded-0 mt-3">
+                            <i class="fas fa-arrow-left"></i> Ortga qaytish
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Izohlar bo'limi -->
+                <div class="row mt-5">
+                    <div class="col-md-12">
+                        <h3 class="border-bottom pb-2">Izohlar</h3>
+                    </div>
+                    {% for review in product.reviews.all %}
+                        <div class="col-md-12 mb-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="card-title mb-1">{{ review.user.first_name|default:review.user.username }}</h5>
+                                            <div class="star-rating mb-2">
+                                                {% for i in "12345"|make_list %}
+                                                    {% if i|add:0 <= review.rating %}
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    {% else %}
+                                                        <i class="far fa-star text-muted"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <span class="ms-2 text-muted">({{ review.rating }}/5)</span>
+                                            </div>
+                                        </div>
+                                        <small class="text-muted">{{ review.created_at|date:"d M Y, H:i" }}</small>
+                                    </div>
+                                    <p class="card-text mt-2">{{ review.comment }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-md-12">
+                            <div class="text-center p-4 bg-light rounded">
+                                <i class="fas fa-comments fa-2x text-muted mb-2"></i>
+                                <p class="text-muted">Hozircha hech qanday izoh yo'q. Birinchi bo'lib izoh qoldiring!</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Izoh qoldirish -->
+                <div class="row mt-5">
+                    <div class="col-md-12">
+                        <h3 class="border-bottom pb-2">Izoh qoldiring</h3>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <div class="col-md-8">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group mb-3">
+                                    <label for="{{ form.rating.id_for_label }}">Reyting:</label>
+                                    {{ form.rating }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="{{ form.comment.id_for_label }}">Izohingiz:</label>
+                                    {{ form.comment }}
+                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save"></i> Izohni saqlash
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                <a href="{% url 'login' %}" class="alert-link">Izoh qoldirish uchun tizimga kirishingiz kerak.</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInput = document.getElementById('quantity');
+        const minusBtn = document.getElementById('minus-btn');
+        const plusBtn = document.getElementById('plus-btn');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        const maxStock = {{ product.stock }};
+
+        // Miqdor o'zgartirish
+        if (minusBtn) {
+            minusBtn.addEventListener('click', function() {
+                let currentValue = parseInt(quantityInput.value);
+                if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            });
+        }
+
+        if (plusBtn) {
+            plusBtn.addEventListener('click', function() {
+                let currentValue = parseInt(quantityInput.value);
+                if (currentValue < maxStock) {
+                    quantityInput.value = currentValue + 1;
+                } else {
+                    alert('Maksimal ' + maxStock + ' dona buyurtma berish mumkin!');
+                }
+            });
+        }
+
+        // Savatga qo'shish
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                const quantity = quantityInput.value;
+
+                // Loading holatini ko'rsatish
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Qo\'shilmoqda...';
+                this.disabled = true;
+
+                // Multiple marta qo'shish uchun
+                let addCount = 0;
+                const addNext = () => {
+                    if (addCount < quantity) {
+                        fetch(`/add-to-cart/${productId}/`)
+                        .then(response => {
+                            if (response.ok) {
+                                addCount++;
+                                addNext();
+                            } else {
+                                throw new Error('Xatolik yuz berdi');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Xatolik yuz berdi!');
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                        });
+                    } else {
+                        // Muvaffaqiyatli yakunlandi
+                        this.innerHTML = '<i class="fas fa-check"></i> Qo\'shildi!';
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                        }, 2000);
+
+                        // Success xabari
+                        const alert = document.createElement('div');
+                        alert.className = 'alert alert-success alert-dismissible fade show';
+                        alert.innerHTML = `
+                            <i class="fas fa-check-circle"></i> ${quantity} dona mahsulot savatga qo'shildi!
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                        `;
+                        document.querySelector('.container').insertBefore(alert, document.querySelector('.row'));
+
+                        // 5 soniyadan keyin xabarni o'chirish
+                        setTimeout(() => {
+                            if (alert.parentNode) {
+                                alert.remove();
+                            }
+                        }, 5000);
+                    }
+                };
+                addNext();
+            });
+        }
+
+        // Miqdor input tekshirish
+        if (quantityInput) {
+            quantityInput.addEventListener('change', function() {
+                let value = parseInt(this.value);
+                if (value < 1) {
+                    this.value = 1;
+                } else if (value > maxStock) {
+                    this.value = maxStock;
+                    alert('Maksimal ' + maxStock + ' dona buyurtma berish mumkin!');
+                }
+            });
+        }
+    });
+    </script>
+{% endblock %}
+
+<!-- Bootstrap JS -->
+{% block js %}
+    <script src="{% static 'beauty/js/popper.min.js' %}"></script>
+    <script src="{% static 'beauty/js/bootstrap.min.js' %}"></script>
+{% endblock %}

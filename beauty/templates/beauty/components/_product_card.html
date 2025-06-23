@@ -1,0 +1,11 @@
+{% load static %}
+
+<div class="col-lg-4 col-md-6 item-entry mb-4">
+    {% for product in products %}
+        <a href="#" class="product-item md-height bg-gray d-block">
+            <img src="{{ product.image.url }}" alt="Image" class="img-fluid">
+        </a>
+        <h2 class="item-title"><a href="#">{{ product.name }}</a></h2>
+        <strong class="item-price">{{ product.price }}</strong>
+    {% endfor %}
+</div>

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+
+{% for product in products %}
+<div class="product">
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.price }} so'm</p>
+</div>
+{%endfor%}

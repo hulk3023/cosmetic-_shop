@@ -1,0 +1,9 @@
+{% with total_rating=product.reviews.aggregate_avg_rating.avg_rating %}
+    {% for star in "12345"|make_list %}
+        {% if star|add:0 <= avg_rating %}
+            <span class="icon-star text-warning"></span>
+        {% else %}
+            <span class="icon-star text-secondary"></span>
+        {% endif %}
+    {% endfor %}
+{% endwith %}
